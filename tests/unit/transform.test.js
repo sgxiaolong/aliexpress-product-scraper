@@ -128,3 +128,12 @@ test("buildProductJson passes through description and reviews", () => {
   assert.equal(result.description, desc);
   assert.deepStrictEqual(result.reviews, revs);
 });
+
+test("buildProductJson removes source-page scripts while retaining description content", () => {
+  const content = '<style>p{color:red}</style><p>Product &amp; details</p><img src="https://example.com/product.jpg">';
+  const result = buildProductJson({
+    data: {},
+    descriptionData: `${content}<script>window.adminAccountId=2678280160;</script><SCRIPT src="tracking.js"></SCRIPT>`,
+  });
+  assert.equal(result.description, content);
+});

@@ -1,5 +1,15 @@
 import { get as GetVariants } from "./variants.js";
 import { get as GetShippingDetails } from "./shipping.js";
+import { load } from "cheerio";
+
+const stripDescriptionScripts = (html) => {
+  if (typeof html !== "string" || !/<script\b/i.test(html)) {
+    return html;
+  }
+  const $ = load(html, null, false);
+  $("script").remove();
+  return $.html();
+};
 
 const buildProductJson = ({ data, descriptionData = null, reviews = [] }) => {
   const shipping = GetShippingDetails(
@@ -14,7 +24,7 @@ const buildProductJson = ({ data, descriptionData = null, reviews = [] }) => {
       total: data.inventoryComponent?.totalQuantity || 0,
       available: data.inventoryComponent?.totalAvailQuantity || 0,
     },
-    description: descriptionData,
+    description: stripDescriptionScripts(descriptionData),
     orders: data.tradeComponent?.formatTradeCount || "0",
     storeInfo: {
       name: data.sellerComponent?.storeName,
