@@ -1,5 +1,7 @@
 # AliExpress Product Scraper
 
+Documentation: [docs/README.md](docs/README.md) · Collaboration: [AGENTS.md](AGENTS.md)
+
 [![Node.js Package](https://github.com/sudheer-ranga/aliexpress-product-scraper/actions/workflows/npm-publish.yml/badge.svg?branch=master)](https://github.com/sudheer-ranga/aliexpress-product-scraper/actions/workflows/npm-publish.yml)
 
 Scrapes AliExpress product information and returns JSON data including:

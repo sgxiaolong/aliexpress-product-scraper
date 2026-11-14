@@ -11,6 +11,7 @@ export default [
         console: "readonly",
         process: "readonly",
         Buffer: "readonly",
+        AbortController: "readonly",
         __dirname: "readonly",
         __filename: "readonly",
         module: "readonly",
