@@ -4,7 +4,7 @@
 - [项目协作规范](../AGENTS.md)与[既有贡献指南](../CLAUDE.md)：开发、兼容性和测试要求。
 - [Agent 运维说明](Agent操作指南.md)：既有工具使用和验证指南。
 - [功能提议](功能提议.md)与[计划](项目计划.md)：历史或拟议事项，不代表已实现功能。
-- [采集服务文档](../../../docs/README.md)：父项目的 HTTP API、浏览器和登录态。
+- 采集服务文档：嵌入 `my-aliexpress-crawler` 时参见父项目的 `docs/README.md`，说明 HTTP API、浏览器和登录态；独立检出本库时该文档不在本仓库中。
 
 入口、依赖和 Node 版本以 `package.json`、`index.js` 和 `src/` 为准。默认测试使用替身和样本；真实网络 smoke 不属于普通文档核对。
 
