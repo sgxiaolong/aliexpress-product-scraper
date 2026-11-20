@@ -1,7 +1,7 @@
 # Agent Coding Guidelines
 
 ## Workflow
-- Always create a new branch per task; never commit directly to `master`.
+- Work on `main` by default. When the user requests a task branch, use the same branch name as the parent workspace.
 - Run `pnpm run lint` and `pnpm run test` before committing.
 - Keep PRs focused and scoped to one concern.
 - Use `pnpm`, not npm or yarn.
