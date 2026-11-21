@@ -1,0 +1,14 @@
+# 商品采集库文档索引
+
+- [项目概览与 API](../README.md)：安装、输入选项、返回格式和版本边界。
+- [项目协作规范](../AGENTS.md)与[既有贡献指南](../CLAUDE.md)：开发、兼容性和测试要求。
+- [Agent 运维说明](Agent操作指南.md)：既有工具使用和验证指南。
+- [功能提议](功能提议.md)与[计划](项目计划.md)：历史或拟议事项，不代表已实现功能。
+- 采集服务文档：嵌入 `my-aliexpress-crawler` 时参见父项目的 `docs/README.md`，说明 HTTP API、浏览器和登录态；独立检出本库时该文档不在本仓库中。
+
+入口、依赖和 Node 版本以 `package.json`、`index.js` 和 `src/` 为准。默认导出提供完整商品抓取；采集服务通过包入口的具名导出 `getReviews`、`parseJsonp`、`extractDataFromApiResponse` 和 `buildProductJson` 复用评论、解析及转换逻辑。默认测试使用替身和样本；真实网络 smoke 不属于普通文档核对。
+
+
+## 评论失败边界（2026-11-14）
+
+`src/reviews.js` 的每页请求默认 15 秒，覆盖 fetch 与 JSON 响应体；本地 `get` 可传正数 `timeoutMs` 调整，不发送给上游。任意页的网络、解析、超时或 HTTP 错误均停止继续取评论，返回已经取得的部分，第一页失败返回空数组。商品详情采集继续，不自动重试评论请求；返回空数组不代表上游实际没有评价。

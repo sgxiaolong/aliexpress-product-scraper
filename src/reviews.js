@@ -24,7 +24,7 @@ const getReview = (review) => {
   return data;
 };
 
-const get = async ({ productId, total, limit, filterReviewsBy = "all" }) => {
+const get = async ({ productId, total, limit, filterReviewsBy = "all", timeoutMs = 15000 }) => {
   let allReviews = [];
   const COUNT_PER_PAGE = 20;
 
@@ -42,8 +42,10 @@ const get = async ({ productId, total, limit, filterReviewsBy = "all" }) => {
   for (let currentPage = 1; currentPage <= totalPages; currentPage++) {
     const reviewUrl = `https://feedback.aliexpress.com/pc/searchEvaluation.do?productId=${productId}&page=${currentPage}&pageSize=${COUNT_PER_PAGE}&filter=${filterReviewsBy}`;
     
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), Number.isFinite(timeoutMs) && timeoutMs > 0 ? timeoutMs : 15000);
     try {
-      const review = await fetch(reviewUrl);
+      const review = await fetch(reviewUrl, { signal: controller.signal });
       
       if (!review.ok) {
         console.warn(
@@ -71,15 +73,10 @@ const get = async ({ productId, total, limit, filterReviewsBy = "all" }) => {
         `Error fetching reviews page ${currentPage} for product ${productId}:`,
         error.message
       );
-      // Continue to next page or break if it's a critical error
-      if (currentPage === 1) {
-        // If first page fails, it's likely a critical issue
-        throw new Error(
-          `Failed to fetch reviews for product ${productId}: ${error.message}`,
-          { cause: error }
-        );
-      }
+      // 评论是可选资料；网络、解析或超时失败保留已有评论，不中断商品详情采集。
       break;
+    } finally {
+      clearTimeout(timer);
     }
   }
 
